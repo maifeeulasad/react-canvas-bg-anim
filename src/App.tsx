@@ -1,7 +1,7 @@
 // @ts-expect-error fix later todo
 import React, { ReactNode } from 'react';
 import Attraction from './components/Attraction';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 import BubbleParticle from './components/BubbleParticle';
 import HighlightedBox from './components/HighlightedBox';
 import MeteorParticle from './components/MeteorParticle';
@@ -154,7 +154,7 @@ const HighlightedBoxContent = (): ReactNode[] =>
         <MiniHighlightedBoxContent key={i} i={i + 1} />
     ));
 
-const App = () => <Router>
+const App = () => <BrowserRouter basename="/react-canvas-bg-anim">
     <Routes>
         <Route path="/" element={<BasePage />} />
         <Route path="/attraction" element={<Attraction content={<AttractionContent />} />} />
@@ -163,6 +163,6 @@ const App = () => <Router>
         <Route path="/meteor-particle" element={<MeteorParticle content={<MeteorParticleContent />} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
-</Router>;
+</BrowserRouter>;
 
 export default App;
