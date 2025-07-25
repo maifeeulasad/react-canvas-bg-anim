@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     react(),
     dts({
-      entryRoot: 'lib',
+      entryRoot: 'src/components',
       outDir: 'dist',
       tsconfigPath: './tsconfig.build.json',
       copyDtsFiles: true,
