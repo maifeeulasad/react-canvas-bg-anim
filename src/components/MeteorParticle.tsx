@@ -169,7 +169,15 @@ class Star extends Circle {
   }
 }
 
-const MeteorParticle = () => {
+interface IMeteorParticle {
+  cometCount: number;
+  starCount: number;
+  clearColor: string;
+}
+
+interface MeteorParticleProps extends Partial<IMeteorParticle> { }
+
+const MeteorParticle = ({ cometCount, starCount, clearColor }: MeteorParticleProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // @ts-expect-error fix later todo
   const animationRef = useRef<number>();
@@ -177,10 +185,17 @@ const MeteorParticle = () => {
   const timeRef = useRef({ start: 0, current: 0, dt: 0 });
 
   // Animation parameters
-  const params = {
+  const defaultParams = {
     cometCount: 20,
     starCount: 40,
     clearColor: '#232334'
+  };
+
+  const params: IMeteorParticle = {
+    ...defaultParams,
+    ...(cometCount !== undefined && { cometCount }),
+    ...(starCount !== undefined && { starCount }),
+    ...(clearColor !== undefined && { clearColor })
   };
 
   const createComet = useCallback((width: number, height: number): Comet => {
