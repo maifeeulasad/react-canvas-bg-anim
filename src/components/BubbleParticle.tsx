@@ -120,7 +120,20 @@ interface Mouse {
   isDefined(): boolean;
 }
 
-const BubbleParticle = () => {
+interface IBubbleParticle {
+  objectsCount: number;
+  mouseDistance: number;
+  minRadius: number;
+  maxRadius: number;
+  radiusAnimSpeed: number;
+  velocityRange: number;
+  clearColor: string;
+  colors: string[];
+}
+
+interface IBubbleParticleProps extends Partial<IBubbleParticle> { }
+
+const BubbleParticle = ({ objectsCount, mouseDistance, minRadius, maxRadius, radiusAnimSpeed, velocityRange, clearColor, colors }: IBubbleParticleProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // @ts-expect-error fix later todo
   const animationRef = useRef<number>();
@@ -130,7 +143,7 @@ const BubbleParticle = () => {
   const timeRef = useRef({ start: 0, current: 0, dt: 0 });
 
   // Animation parameters
-  const params = {
+  const defaultParams = {
     objectsCount: 1000,
     mouseDistance: 150,
     minRadius: 10,
@@ -144,6 +157,18 @@ const BubbleParticle = () => {
       '#E37B40',
       '#F53855'
     ]
+  };
+
+  const params: IBubbleParticle = {
+    ...defaultParams,
+    ...(objectsCount !== undefined && { objectsCount }),
+    ...(mouseDistance !== undefined && { mouseDistance }),
+    ...(minRadius !== undefined && { minRadius }),
+    ...(maxRadius !== undefined && { maxRadius }),
+    ...(radiusAnimSpeed !== undefined && { radiusAnimSpeed }),
+    ...(velocityRange !== undefined && { velocityRange }),
+    ...(clearColor !== undefined && { clearColor }),
+    ...(colors !== undefined && { colors })
   };
 
   const mouseDistanceSquared = params.mouseDistance * params.mouseDistance;
