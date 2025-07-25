@@ -207,19 +207,20 @@ interface IHighlightedBox {
   particleVelocity: number,
   particleRadius: number,
   particleColor: string,
-  pathOffset: number
+  pathOffset: number,
+  contents: React.ReactNode[],
 }
 
 interface HighlightedBoxProps extends Partial<IHighlightedBox> { }
 
-const HighlightedBox = ({ particlesCount, particleVelocity, particleRadius, particleColor, pathOffset }: HighlightedBoxProps) => {
+const HighlightedBox = ({ particlesCount, particleVelocity, particleRadius, particleColor, pathOffset, contents }: HighlightedBoxProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // @ts-expect-error fix later todo
   const animationRef = useRef<number>();
   const particlesRef = useRef<ParticleFollowPath[]>([]);
   const targetBoxRef = useRef<BoxElement | null>(null);
   const timeRef = useRef({ start: 0, current: 0, dt: 0 });
-  const [hoveredBox, setHoveredBox] = useState<number | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   // Animation parameters
   const defaultParams = {
@@ -227,7 +228,8 @@ const HighlightedBox = ({ particlesCount, particleVelocity, particleRadius, part
     particleVelocity: 0.1,
     particleRadius: 2,
     particleColor: '#ff0000',
-    pathOffset: 10
+    pathOffset: 10,
+    contents: [<div>HighlightedBox Content 1</div>, <div>HighlightedBox Content 2</div>, <div>HighlightedBox Content 3</div>],
   };
 
   const params: IHighlightedBox = {
@@ -236,7 +238,8 @@ const HighlightedBox = ({ particlesCount, particleVelocity, particleRadius, part
     ...(particleVelocity !== undefined && { particleVelocity }),
     ...(particleRadius !== undefined && { particleRadius }),
     ...(particleColor !== undefined && { particleColor }),
-    ...(pathOffset !== undefined && { pathOffset })
+    ...(pathOffset !== undefined && { pathOffset }),
+    ...(contents !== undefined && { contents }),
   };
 
   const createPathAround = useCallback((box: BoxElement, diff = 20): Path => {
@@ -284,7 +287,7 @@ const HighlightedBox = ({ particlesCount, particleVelocity, particleRadius, part
   const removeTarget = useCallback(() => {
     targetBoxRef.current = null;
     particlesRef.current = [];
-    setHoveredBox(null);
+    setHoveredIndex(null);
   }, []);
 
   const updateParticles = useCallback((dt: number) => {
@@ -341,7 +344,7 @@ const HighlightedBox = ({ particlesCount, particleVelocity, particleRadius, part
     for (const elem of elements) {
       if (elem.classList.contains('highlight-box')) {
         const boxIndex = parseInt(elem.getAttribute('data-box-index') || '0');
-        setHoveredBox(boxIndex);
+        setHoveredIndex(boxIndex);
         setTargetTo(elem as BoxElement);
         return;
       }
@@ -385,16 +388,32 @@ const HighlightedBox = ({ particlesCount, particleVelocity, particleRadius, part
     };
   }, [resizeCanvas, animate, handleMouseMove]);
 
+
+  const getItemStyles = (index: number): React.CSSProperties => {
+    const isHovered = hoveredIndex === index;
+
+    return {
+      transition: 'all 0.3s ease',
+      cursor: 'pointer',
+      transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
+      boxShadow: isHovered
+        ? '0 4px 12px rgba(0,0,0,0.15)'
+        : '0 2px 8px rgba(0,0,0,0.1)',
+      ...(isHovered && { filter: 'brightness(1.05)' })
+    };
+  };
+
   return (
-    <div style={{
-      position: 'relative',
-      width: '100vw',
-      height: '100vh',
-      overflow: 'hidden',
-      backgroundColor: '#f0f0f0',
-      margin: 0,
-      padding: 0
-    }}>
+    <div
+      className='highlighted-container'
+      style={{
+        position: 'relative',
+        width: '100%',
+        minHeight: '100vh',
+        backgroundColor: '#f0f0f0',
+        margin: 0,
+      }}
+    >
       {/* Canvas for particles */}
       <canvas
         ref={canvasRef}
@@ -403,73 +422,29 @@ const HighlightedBox = ({ particlesCount, particleVelocity, particleRadius, part
           top: 0,
           left: 0,
           pointerEvents: 'none',
-          zIndex: 10
+          zIndex: 1000
         }}
       />
 
       {/* Demo content with highlightable boxes */}
       <div style={{
-        padding: '50px',
-        fontFamily: 'Arial, sans-serif'
+        gap: '1rem',
+        padding: '2rem',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+        maxWidth: '1200px',
+        margin: '0 auto'
       }}>
-        <h1 style={{
-          fontSize: '3rem',
-          marginBottom: '2rem',
-          textAlign: 'center',
-          color: '#333'
-        }}>
-          Path Following Particles Demo
-        </h1>
-
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          gap: '2rem',
-          maxWidth: '1200px',
-          margin: '0 auto'
-        }}>
-          {[1, 2, 3, 4, 5, 6].map((num) => (
-            <div
-              key={num}
-              className="highlight-box"
-              data-box-index={num}
-              style={{
-                padding: '2rem',
-                backgroundColor: hoveredBox === num ? '#e3f2fd' : '#fff',
-                border: '2px solid #ddd',
-                borderRadius: '8px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                transition: 'all 0.3s ease',
-                cursor: 'pointer',
-                transform: hoveredBox === num ? 'translateY(-2px)' : 'translateY(0)'
-              }}
-            >
-              <h3 style={{
-                margin: '0 0 1rem 0',
-                color: '#333',
-                fontSize: '1.5rem'
-              }}>
-                Box {num}
-              </h3>
-              <p style={{
-                margin: 0,
-                color: '#666',
-                lineHeight: '1.5'
-              }}>
-                Hover over this box to see particles follow a path around its border.
-                The particles will trace the perimeter with smooth animation.
-              </p>
-            </div>
-          ))}
-        </div>
-
-        <div style={{
-          marginTop: '3rem',
-          textAlign: 'center',
-          color: '#666'
-        }}>
-          <p>Move your mouse over the boxes above to see the particle trail effect!</p>
-        </div>
+        {params.contents.map((content, index) => (
+          <div
+            key={index}
+            className={`highlight-box ${hoveredIndex === index ? 'highlight-box-hovered' : ''}`}
+            data-highlight-index={index}
+            style={getItemStyles(index)}
+          >
+            {content}
+          </div>
+        ))}
       </div>
     </div>
   );
