@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback, ReactNode } from 'react';
+import React, { useEffect, useRef, useCallback, ReactNode, MouseEvent } from 'react';
 
 interface Entity {
   x: number;
@@ -123,8 +123,6 @@ const Attraction = ({ particleCount, radius, dispersal, range, rangeExplosion, f
   const mouseRef = useRef<Mouse>({ x: -1, y: -1, isDefined: () => mouseRef.current.x !== -1 });
   const objectsRef = useRef<Circle[]>([]);
   const timeRef = useRef({ start: 0, current: 0, dt: 0 });
-  // @ts-expect-error fix later todo
-  const mouseButtonsRef = useRef([false, false, false]);
 
   // Animation parameters
   const defaultParams = {
@@ -261,7 +259,7 @@ const Attraction = ({ particleCount, radius, dispersal, range, rangeExplosion, f
     animationRef.current = requestAnimationFrame(animate);
   }, [updateParticles, drawParticles]);
 
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleMouseMove = useCallback((e: MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -275,7 +273,7 @@ const Attraction = ({ particleCount, radius, dispersal, range, rangeExplosion, f
     mouseRef.current.y = -1;
   }, []);
 
-  const handleMouseDown = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleMouseDown = useCallback((e: MouseEvent<HTMLCanvasElement>) => {
     if (e.button === 0 && mouseRef.current.isDefined()) { // Left click
       for (const o of objectsRef.current) {
         const dx = mouseRef.current.x - o.x;

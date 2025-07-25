@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback, ReactNode } from 'react';
+import React, { useEffect, useRef, useCallback, ReactNode, MouseEvent } from 'react';
 
 interface Entity {
   x: number;
@@ -267,7 +267,7 @@ const BubbleParticle = ({ objectsCount, mouseDistance, minRadius, maxRadius, rad
     animationRef.current = requestAnimationFrame(animate);
   }, [updateBubbles, drawBubbles, params.clearColor]);
 
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleMouseMove = useCallback((e: MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 

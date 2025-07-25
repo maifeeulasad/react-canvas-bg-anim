@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback, useState } from 'react';
+import React, { useEffect, useRef, useCallback, useState, ReactNode, CSSProperties } from 'react';
 
 interface Entity {
   x: number;
@@ -208,7 +208,7 @@ interface IHighlightedBox {
   particleRadius: number,
   particleColor: string,
   pathOffset: number,
-  contents: React.ReactNode[],
+  contents: ReactNode[],
 }
 
 interface HighlightedBoxProps extends Partial<IHighlightedBox> { }
@@ -330,12 +330,10 @@ const HighlightedBox = ({ particlesCount, particleVelocity, particleRadius, part
     animationRef.current = requestAnimationFrame(animate);
   }, [updateParticles, drawParticles]);
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // @ts-expect-error fix later todo
-    const rect = canvas.getBoundingClientRect();
     const x = e.clientX;
     const y = e.clientY;
 
@@ -369,7 +367,7 @@ const HighlightedBox = ({ particlesCount, particleVelocity, particleRadius, part
       const mockEvent = {
         clientX: e.clientX,
         clientY: e.clientY
-      } as React.MouseEvent;
+      } as MouseEvent;
       handleMouseMove(mockEvent);
     };
 
@@ -389,7 +387,7 @@ const HighlightedBox = ({ particlesCount, particleVelocity, particleRadius, part
   }, [resizeCanvas, animate, handleMouseMove]);
 
 
-  const getItemStyles = (index: number): React.CSSProperties => {
+  const getItemStyles = (index: number): CSSProperties => {
     const isHovered = hoveredIndex === index;
 
     return {
