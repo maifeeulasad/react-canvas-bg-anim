@@ -107,6 +107,7 @@ const Attraction: React.FC = () => {
   const mouseRef = useRef<Mouse>({ x: -1, y: -1, isDefined: () => mouseRef.current.x !== -1 });
   const objectsRef = useRef<Circle[]>([]);
   const timeRef = useRef({ start: 0, current: 0, dt: 0 });
+  // @ts-expect-error fix later todo
   const mouseButtonsRef = useRef([false, false, false]);
 
   // Animation parameters

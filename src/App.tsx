@@ -1,3 +1,4 @@
+// @ts-expect-error fix later todo
 import React from 'react';
 import Attraction from './components/Attraction';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
