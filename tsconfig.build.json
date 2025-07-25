@@ -15,8 +15,8 @@
         "skipLibCheck": true,
         "declaration": true,
         "declarationDir": "./dist/lib/types",
-        "emitDeclarationOnly": false,
-        "outDir": "./dist/lib",
+        "emitDeclarationOnly": true,
+        "outDir": "./dist",
         "jsx": "react-jsx",
         "strict": true,
         "forceConsistentCasingInFileNames": true
