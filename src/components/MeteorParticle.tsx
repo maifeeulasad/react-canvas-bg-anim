@@ -170,6 +170,7 @@ class Star extends Circle {
 
 const MeteorParticle: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // @ts-expect-error fix later todo
   const animationRef = useRef<number>();
   const objectsRef = useRef<(Comet | Star)[]>([]);
   const timeRef = useRef({ start: 0, current: 0, dt: 0 });

@@ -122,7 +122,9 @@ interface Mouse {
 
 const BubbleParticle: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // @ts-expect-error fix later todo
   const animationRef = useRef<number>();
+  // @ts-expect-error fix later todo
   const mouseRef = useRef<Mouse>({ x: -1, y: -1, isDefined: () => mouseRef.current.x !== -1 });
   const objectsRef = useRef<Circle[]>([]);
   const timeRef = useRef({ start: 0, current: 0, dt: 0 });

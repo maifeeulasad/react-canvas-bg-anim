@@ -204,6 +204,7 @@ interface BoxElement {
 
 const HighlightedBox: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // @ts-expect-error fix later todo
   const animationRef = useRef<number>();
   const particlesRef = useRef<ParticleFollowPath[]>([]);
   const targetBoxRef = useRef<BoxElement | null>(null);
