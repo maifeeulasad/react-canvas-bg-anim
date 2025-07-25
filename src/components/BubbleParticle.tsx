@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, ReactNode } from 'react';
 
 interface Entity {
   x: number;
@@ -129,11 +129,12 @@ interface IBubbleParticle {
   velocityRange: number;
   clearColor: string;
   colors: string[];
+  content: ReactNode;
 }
 
 interface IBubbleParticleProps extends Partial<IBubbleParticle> { }
 
-const BubbleParticle = ({ objectsCount, mouseDistance, minRadius, maxRadius, radiusAnimSpeed, velocityRange, clearColor, colors }: IBubbleParticleProps) => {
+const BubbleParticle = ({ objectsCount, mouseDistance, minRadius, maxRadius, radiusAnimSpeed, velocityRange, clearColor, colors, content }: IBubbleParticleProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // @ts-expect-error fix later todo
   const animationRef = useRef<number>();
@@ -156,7 +157,8 @@ const BubbleParticle = ({ objectsCount, mouseDistance, minRadius, maxRadius, rad
       '#F0CA4D',
       '#E37B40',
       '#F53855'
-    ]
+    ],
+    content: <>BubbleParticle Content</>
   };
 
   const params: IBubbleParticle = {
@@ -168,7 +170,8 @@ const BubbleParticle = ({ objectsCount, mouseDistance, minRadius, maxRadius, rad
     ...(radiusAnimSpeed !== undefined && { radiusAnimSpeed }),
     ...(velocityRange !== undefined && { velocityRange }),
     ...(clearColor !== undefined && { clearColor }),
-    ...(colors !== undefined && { colors })
+    ...(colors !== undefined && { colors }),
+    ...(content !== undefined && { content }),
   };
 
   const mouseDistanceSquared = params.mouseDistance * params.mouseDistance;
@@ -347,40 +350,7 @@ const BubbleParticle = ({ objectsCount, mouseDistance, minRadius, maxRadius, rad
         onMouseLeave={handleMouseLeave}
         onContextMenu={(e) => e.preventDefault()}
       />
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        pointerEvents: 'none'
-      }}>
-        <div style={{ textAlign: 'center', color: 'white' }}>
-          <h1 style={{
-            fontSize: '7rem',
-            fontWeight: 'bold',
-            margin: '0 0 1rem 0',
-            color: '#F0F0F1',
-            fontFamily: 'Lobster, cursive',
-            textShadow: '0 0 0.5em rgba(0, 0, 0, 1)'
-          }}>
-            Interactive Bubbles
-          </h1>
-          <h2 style={{
-            fontSize: '3rem',
-            fontWeight: 'bold',
-            margin: 0,
-            color: '#F0F0F1',
-            fontFamily: 'Lobster, cursive',
-            textShadow: '0 0 0.5em rgba(0, 0, 0, 1)'
-          }}>
-            React TypeScript
-          </h2>
-        </div>
-      </div>
+      {content}
     </div>
   );
 };
