@@ -19,7 +19,8 @@
         "outDir": "./dist",
         "jsx": "react-jsx",
         "strict": true,
-        "forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true,
+        "noUnusedLocals": true,
     },
     "include": [
         "src/components"
