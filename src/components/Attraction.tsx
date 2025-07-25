@@ -99,7 +99,7 @@ interface Mouse {
   isDefined(): boolean;
 }
 
-const Attraction: React.FC = () => {
+const Attraction = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // @ts-expect-error fix later todo
   const animationRef = useRef<number>();

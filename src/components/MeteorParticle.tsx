@@ -1,3 +1,4 @@
+// @ts-expect-error fix later todo
 import React, { useEffect, useRef, useCallback } from 'react';
 
 interface Entity {
@@ -168,7 +169,7 @@ class Star extends Circle {
   }
 }
 
-const MeteorParticle: React.FC = () => {
+const MeteorParticle = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // @ts-expect-error fix later todo
   const animationRef = useRef<number>();

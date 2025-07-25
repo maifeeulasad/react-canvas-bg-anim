@@ -120,7 +120,7 @@ interface Mouse {
   isDefined(): boolean;
 }
 
-const BubbleParticle: React.FC = () => {
+const BubbleParticle = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // @ts-expect-error fix later todo
   const animationRef = useRef<number>();
