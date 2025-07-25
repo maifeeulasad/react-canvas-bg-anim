@@ -30,7 +30,6 @@ export default defineConfig({
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
-          antd: 'antd',
         },
       },
     },
