@@ -202,7 +202,17 @@ interface BoxElement {
   classList: DOMTokenList;
 }
 
-const HighlightedBox = () => {
+interface IHighlightedBox {
+  particlesCount: number,
+  particleVelocity: number,
+  particleRadius: number,
+  particleColor: string,
+  pathOffset: number
+}
+
+interface HighlightedBoxProps extends Partial<IHighlightedBox> { }
+
+const HighlightedBox = ({ particlesCount, particleVelocity, particleRadius, particleColor, pathOffset }: HighlightedBoxProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // @ts-expect-error fix later todo
   const animationRef = useRef<number>();
@@ -212,12 +222,21 @@ const HighlightedBox = () => {
   const [hoveredBox, setHoveredBox] = useState<number | null>(null);
 
   // Animation parameters
-  const params = {
+  const defaultParams = {
     particlesCount: 30,
     particleVelocity: 0.1,
     particleRadius: 2,
     particleColor: '#ff0000',
     pathOffset: 10
+  };
+
+  const params: IHighlightedBox = {
+    ...defaultParams,
+    ...(particlesCount !== undefined && { particlesCount }),
+    ...(particleVelocity !== undefined && { particleVelocity }),
+    ...(particleRadius !== undefined && { particleRadius }),
+    ...(particleColor !== undefined && { particleColor }),
+    ...(pathOffset !== undefined && { pathOffset })
   };
 
   const createPathAround = useCallback((box: BoxElement, diff = 20): Path => {
