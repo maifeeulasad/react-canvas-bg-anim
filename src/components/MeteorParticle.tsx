@@ -1,5 +1,5 @@
 // @ts-expect-error fix later todo
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, ReactNode } from 'react';
 
 interface Entity {
   x: number;
@@ -173,11 +173,12 @@ interface IMeteorParticle {
   cometCount: number;
   starCount: number;
   clearColor: string;
+  content: ReactNode;
 }
 
 interface MeteorParticleProps extends Partial<IMeteorParticle> { }
 
-const MeteorParticle = ({ cometCount, starCount, clearColor }: MeteorParticleProps) => {
+const MeteorParticle = ({ cometCount, starCount, clearColor, content }: MeteorParticleProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // @ts-expect-error fix later todo
   const animationRef = useRef<number>();
@@ -188,14 +189,16 @@ const MeteorParticle = ({ cometCount, starCount, clearColor }: MeteorParticlePro
   const defaultParams = {
     cometCount: 20,
     starCount: 40,
-    clearColor: '#232334'
+    clearColor: '#232334',
+    content: <>MeteorParticle Content</>
   };
 
   const params: IMeteorParticle = {
     ...defaultParams,
     ...(cometCount !== undefined && { cometCount }),
     ...(starCount !== undefined && { starCount }),
-    ...(clearColor !== undefined && { clearColor })
+    ...(clearColor !== undefined && { clearColor }),
+    ...(content !== undefined && { content })
   };
 
   const createComet = useCallback((width: number, height: number): Comet => {
@@ -351,40 +354,7 @@ const MeteorParticle = ({ cometCount, starCount, clearColor }: MeteorParticlePro
           cursor: 'default'
         }}
       />
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        pointerEvents: 'none'
-      }}>
-        <div style={{ textAlign: 'center', color: 'white' }}>
-          <h1 style={{
-            fontSize: '7rem',
-            fontWeight: 'bold',
-            margin: '0 0 1rem 0',
-            color: '#F0F0F1',
-            fontFamily: 'Lobster, cursive',
-            textShadow: '0 0 0.5em rgba(0, 0, 0, 1)'
-          }}>
-            Meteor Shower
-          </h1>
-          <h2 style={{
-            fontSize: '3rem',
-            fontWeight: 'bold',
-            margin: 0,
-            color: '#F0F0F1',
-            fontFamily: 'Lobster, cursive',
-            textShadow: '0 0 0.5em rgba(0, 0, 0, 1)'
-          }}>
-            React TypeScript
-          </h2>
-        </div>
-      </div>
+      {content}
     </div>
   );
 };
