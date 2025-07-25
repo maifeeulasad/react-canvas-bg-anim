@@ -99,7 +99,22 @@ interface Mouse {
   isDefined(): boolean;
 }
 
-const Attraction = () => {
+interface IAttraction {
+  particleCount: number;
+  radius: number;
+  dispersal: number;
+  range: number;
+  rangeExplosion: number;
+  force: number;
+  explosionForce: number;
+  minVel: number;
+  maxVel: number;
+  colors: string[];
+}
+
+interface IAttractionParams extends Partial<IAttraction> {}
+
+const Attraction = ({ particleCount, radius, dispersal, range, rangeExplosion, force, explosionForce, minVel, maxVel, colors }: IAttractionParams) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // @ts-expect-error fix later todo
   const animationRef = useRef<number>();
@@ -111,7 +126,7 @@ const Attraction = () => {
   const mouseButtonsRef = useRef([false, false, false]);
 
   // Animation parameters
-  const params = {
+  const defaultParams = {
     particleCount: 300,
     radius: 2,
     dispersal: 300,
@@ -122,6 +137,20 @@ const Attraction = () => {
     minVel: 10,
     maxVel: 150,
     colors: ['#EBF4F7', '#E00B27', '#2474A6', '#F2A30F']
+  };
+  
+  const params: IAttraction = {
+    ...defaultParams,
+    ...(particleCount !== undefined && { particleCount }),
+    ...(radius !== undefined && { radius }),
+    ...(dispersal !== undefined && { dispersal }),
+    ...(range !== undefined && { range }),
+    ...(rangeExplosion !== undefined && { rangeExplosion }),
+    ...(force !== undefined && { force }),
+    ...(explosionForce !== undefined && { explosionForce }),
+    ...(minVel !== undefined && { minVel }),
+    ...(maxVel !== undefined && { maxVel }),
+    ...(colors !== undefined && { colors })
   };
 
   const changeColorAlpha = useCallback((color: string, alpha: number): string => {
