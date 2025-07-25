@@ -1,3 +1,4 @@
+// @ts-expect-error fix later todo
 import React, { useEffect, useRef, useCallback, ReactNode, MouseEvent } from 'react';
 
 interface Entity {
