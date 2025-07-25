@@ -127,12 +127,39 @@ const MeteorParticleContent = () => <div style={{
     </div>
 </div>
 
+const MiniHighlightedBoxContent = ({i}:{i:number}): ReactNode => (
+    <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        color: '#F0F0F1'
+    }}>
+        <h1 style={{
+            fontSize: '3rem',
+            fontWeight: 'bold',
+            margin: 0,
+            color: '#F0F0F1',
+            fontFamily: 'Lobster, cursive',
+            textShadow: '0 0 0.5em rgba(0, 0, 0, 1)'
+        }}>
+            Highlighted Box {i}
+        </h1>
+    </div>
+);
+
+const HighlightedBoxContent = (): ReactNode[] =>
+    Array.from({ length: 5 }, (_, i) => (
+        <MiniHighlightedBoxContent key={i} i={i + 1} />
+    ));
+
 const App = () => <Router>
     <Routes>
         <Route path="/" element={<BasePage />} />
         <Route path="/attraction" element={<Attraction content={<AttractionContent />} />} />
         <Route path="/bubble-particle" element={<BubbleParticle content={<BubbleParticleContent />} />} />
-        <Route path="/highlighted-box" element={<HighlightedBox />} />
+        <Route path="/highlighted-box" element={<HighlightedBox contents={HighlightedBoxContent()} />} />
         <Route path="/meteor-particle" element={<MeteorParticle content={<MeteorParticleContent />} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
