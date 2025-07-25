@@ -7,7 +7,7 @@ interface Entity {
   vy: number;
   ax: number;
   ay: number;
-  
+
   update(dt: number): void;
   bounds(): { x: number; y: number; w: number; h: number };
 }
@@ -38,15 +38,15 @@ class BaseEntity implements Entity {
   update(dt: number): void {
     let ax = this.ax;
     let ay = this.ay;
-    
+
     for (const [, [x, y]] of this.forces) {
       ax += x;
       ay += y;
     }
-    
+
     this.x += ax * dt * dt / 2 + this.vx * dt;
     this.vx += ax * dt;
-    
+
     this.y += ay * dt * dt / 2 + this.vy * dt;
     this.vy += ay * dt;
   }
@@ -84,11 +84,11 @@ class Circle extends BaseEntity {
   }
 
   bounds(): { x: number; y: number; w: number; h: number } {
-    return { 
-      x: this.x - this.radius, 
-      y: this.y - this.radius, 
-      w: this.radius * 2, 
-      h: this.radius * 2 
+    return {
+      x: this.x - this.radius,
+      y: this.y - this.radius,
+      w: this.radius * 2,
+      h: this.radius * 2
     };
   }
 }
@@ -130,7 +130,7 @@ const Attraction = () => {
 
   const initializeParticles = useCallback((width: number, height: number) => {
     const objects: Circle[] = [];
-    
+
     for (let i = 0; i < params.particleCount; i++) {
       const rad = Math.random() * 2 * Math.PI;
       const circle = new Circle(
@@ -141,7 +141,7 @@ const Attraction = () => {
       );
       objects.push(circle);
     }
-    
+
     objectsRef.current = objects;
   }, [params.particleCount, params.radius, params.colors]);
 
@@ -193,7 +193,7 @@ const Attraction = () => {
       let vel = Math.sqrt(o.vx * o.vx + o.vy * o.vy);
       if (vel > params.maxVel) vel = params.maxVel;
       if (vel < params.minVel) vel = params.minVel;
-      
+
       const alpha = (vel - params.minVel) / (params.maxVel - params.minVel);
       o.color = changeColorAlpha(o.color, alpha);
       o.draw(ctx);
@@ -281,7 +281,7 @@ const Attraction = () => {
 
   useEffect(() => {
     resizeCanvas();
-    
+
     const handleResize = () => resizeCanvas();
     window.addEventListener('resize', handleResize);
 
@@ -331,7 +331,7 @@ const Attraction = () => {
         pointerEvents: 'none'
       }}>
         <div style={{ textAlign: 'center', color: 'white' }}>
-          <h1 style={{ 
+          <h1 style={{
             fontSize: '7rem',
             fontWeight: 'bold',
             margin: '0 0 1rem 0',
@@ -341,7 +341,7 @@ const Attraction = () => {
           }}>
             Magnetic particles
           </h1>
-          <h2 style={{ 
+          <h2 style={{
             fontSize: '3rem',
             fontWeight: 'bold',
             margin: 0,

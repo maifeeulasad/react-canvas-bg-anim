@@ -7,7 +7,7 @@ interface Entity {
   vy: number;
   ax: number;
   ay: number;
-  
+
   update(dt: number): void;
   bounds(): { x: number; y: number; w: number; h: number };
 }
@@ -38,15 +38,15 @@ class BaseEntity implements Entity {
   update(dt: number): void {
     let ax = this.ax;
     let ay = this.ay;
-    
+
     for (const [, [x, y]] of this.forces) {
       ax += x;
       ay += y;
     }
-    
+
     this.x += ax * dt * dt / 2 + this.vx * dt;
     this.vx += ax * dt;
-    
+
     this.y += ay * dt * dt / 2 + this.vy * dt;
     this.vy += ay * dt;
   }
@@ -84,11 +84,11 @@ class Circle extends BaseEntity {
   }
 
   bounds(): { x: number; y: number; w: number; h: number } {
-    return { 
-      x: this.x - this.radius, 
-      y: this.y - this.radius, 
-      w: this.radius * 2, 
-      h: this.radius * 2 
+    return {
+      x: this.x - this.radius,
+      y: this.y - this.radius,
+      w: this.radius * 2,
+      h: this.radius * 2
     };
   }
 }
@@ -136,7 +136,7 @@ class Path {
 
   getPoint(alpha: number): [number, number] {
     let targetDist = this.totalDistance * (alpha % 1);
-    
+
     for (let i = 0; i < this.distances.length; i++) {
       const dist = this.distances[i];
       if (targetDist < dist) {
@@ -150,14 +150,14 @@ class Path {
       }
       targetDist -= dist;
     }
-    
+
     return this.points[0]; // Fallback
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
     ctx.strokeStyle = ctx.fillStyle = '#00ff00';
     let prev = this.points[this.points.length - 1];
-    
+
     for (const p of this.points) {
       ctx.beginPath();
       ctx.arc(p[0], p[1], 5, 0, 2 * Math.PI);
@@ -235,7 +235,7 @@ const HighlightedBox = () => {
     const path = new Path([left, top], [right, top]);
     path.addPoint([right, bottom]);
     path.addPoint([left, bottom]);
-    
+
     return path;
   }, []);
 
@@ -243,16 +243,16 @@ const HighlightedBox = () => {
     if (targetBoxRef.current !== null) {
       return;
     }
-    
+
     targetBoxRef.current = box;
     const path = createPathAround(targetBoxRef.current, params.pathOffset);
     const particles: ParticleFollowPath[] = [];
 
     for (let i = 0; i < params.particlesCount; i++) {
       const particle = new ParticleFollowPath(
-        path, 
-        params.particleVelocity, 
-        params.particleRadius, 
+        path,
+        params.particleVelocity,
+        params.particleRadius,
         params.particleColor
       );
       particle.pos = i / (params.particlesCount - 1);
@@ -327,7 +327,7 @@ const HighlightedBox = () => {
         return;
       }
     }
-    
+
     removeTarget();
   }, [setTargetTo, removeTarget]);
 
@@ -341,7 +341,7 @@ const HighlightedBox = () => {
 
   useEffect(() => {
     resizeCanvas();
-    
+
     const handleResize = () => resizeCanvas();
     const handleGlobalMouseMove = (e: MouseEvent) => {
       const mockEvent = {
@@ -387,7 +387,7 @@ const HighlightedBox = () => {
           zIndex: 10
         }}
       />
-      
+
       {/* Demo content with highlightable boxes */}
       <div style={{
         padding: '50px',
@@ -401,7 +401,7 @@ const HighlightedBox = () => {
         }}>
           Path Following Particles Demo
         </h1>
-        
+
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
@@ -437,13 +437,13 @@ const HighlightedBox = () => {
                 color: '#666',
                 lineHeight: '1.5'
               }}>
-                Hover over this box to see particles follow a path around its border. 
+                Hover over this box to see particles follow a path around its border.
                 The particles will trace the perimeter with smooth animation.
               </p>
             </div>
           ))}
         </div>
-        
+
         <div style={{
           marginTop: '3rem',
           textAlign: 'center',

@@ -7,7 +7,7 @@ interface Entity {
   vy: number;
   ax: number;
   ay: number;
-  
+
   update(dt: number): void;
   bounds(): { x: number; y: number; w: number; h: number };
   keepInBounds(other: { x: number; y: number; w: number; h: number }): void;
@@ -39,15 +39,15 @@ class BaseEntity implements Entity {
   update(dt: number): void {
     let ax = this.ax;
     let ay = this.ay;
-    
+
     for (const [, [x, y]] of this.forces) {
       ax += x;
       ay += y;
     }
-    
+
     this.x += ax * dt * dt / 2 + this.vx * dt;
     this.vx += ax * dt;
-    
+
     this.y += ay * dt * dt / 2 + this.vy * dt;
     this.vy += ay * dt;
   }
@@ -58,7 +58,7 @@ class BaseEntity implements Entity {
 
   keepInBounds(other: { x: number; y: number; w: number; h: number }): void {
     const me = this.bounds();
-    
+
     if (me.x < other.x) {
       this.x += other.x - me.x;
       this.vx = -this.vx;
@@ -66,7 +66,7 @@ class BaseEntity implements Entity {
       this.x += (other.x + other.w) - (me.x + me.w);
       this.vx = -this.vx;
     }
-    
+
     if (me.y < other.y) {
       this.y += other.y - me.y;
       this.vy = -this.vy;
@@ -105,11 +105,11 @@ class Circle extends BaseEntity {
   }
 
   bounds(): { x: number; y: number; w: number; h: number } {
-    return { 
-      x: this.x - this.radius, 
-      y: this.y - this.radius, 
-      w: this.radius * 2, 
-      h: this.radius * 2 
+    return {
+      x: this.x - this.radius,
+      y: this.y - this.radius,
+      w: this.radius * 2,
+      h: this.radius * 2
     };
   }
 }
@@ -160,20 +160,20 @@ const BubbleParticle = () => {
       filled,
       weight
     );
-    
+
     circle.vx = Math.random() * velocityRange - velocityRange / 2;
     circle.vy = Math.random() * velocityRange - velocityRange / 2;
-    
+
     return circle;
   }, []);
 
   const initializeBubbles = useCallback(() => {
     const objects: Circle[] = [];
-    
+
     for (let i = 0; i < params.objectsCount; i++) {
       objects.push(createCircle(params.minRadius, params.colors, params.velocityRange, true, 5));
     }
-    
+
     objectsRef.current = objects;
   }, [params.objectsCount, params.minRadius, params.colors, params.velocityRange, createCircle]);
 
@@ -185,7 +185,7 @@ const BubbleParticle = () => {
         const diffX = o.x - mouseRef.current.x;
         const diffY = o.y - mouseRef.current.y;
         const distSquared = (diffX * diffX) + (diffY * diffY);
-        
+
         if (distSquared <= mouseDistanceSquared) {
           o.radius += dt * params.radiusAnimSpeed;
           if (o.radius > params.maxRadius) {
@@ -198,7 +198,7 @@ const BubbleParticle = () => {
           }
         }
       }
-      
+
       o.update(dt);
       o.keepInBounds(screenBounds);
     }
@@ -259,7 +259,7 @@ const BubbleParticle = () => {
 
     const oldWidth = canvas.width;
     const oldHeight = canvas.height;
-    
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
@@ -285,7 +285,7 @@ const BubbleParticle = () => {
 
   useEffect(() => {
     resizeCanvas();
-    
+
     const handleResize = () => resizeCanvas();
     window.addEventListener('resize', handleResize);
 
@@ -334,7 +334,7 @@ const BubbleParticle = () => {
         pointerEvents: 'none'
       }}>
         <div style={{ textAlign: 'center', color: 'white' }}>
-          <h1 style={{ 
+          <h1 style={{
             fontSize: '7rem',
             fontWeight: 'bold',
             margin: '0 0 1rem 0',
@@ -344,7 +344,7 @@ const BubbleParticle = () => {
           }}>
             Interactive Bubbles
           </h1>
-          <h2 style={{ 
+          <h2 style={{
             fontSize: '3rem',
             fontWeight: 'bold',
             margin: 0,

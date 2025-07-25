@@ -8,7 +8,7 @@ interface Entity {
   vy: number;
   ax: number;
   ay: number;
-  
+
   update(dt: number): void;
   bounds(): { x: number; y: number; w: number; h: number };
 }
@@ -39,15 +39,15 @@ class BaseEntity implements Entity {
   update(dt: number): void {
     let ax = this.ax;
     let ay = this.ay;
-    
+
     for (const [, [x, y]] of this.forces) {
       ax += x;
       ay += y;
     }
-    
+
     this.x += ax * dt * dt / 2 + this.vx * dt;
     this.vx += ax * dt;
-    
+
     this.y += ay * dt * dt / 2 + this.vy * dt;
     this.vy += ay * dt;
   }
@@ -85,11 +85,11 @@ class Circle extends BaseEntity {
   }
 
   bounds(): { x: number; y: number; w: number; h: number } {
-    return { 
-      x: this.x - this.radius, 
-      y: this.y - this.radius, 
-      w: this.radius * 2, 
-      h: this.radius * 2 
+    return {
+      x: this.x - this.radius,
+      y: this.y - this.radius,
+      w: this.radius * 2,
+      h: this.radius * 2
     };
   }
 }
@@ -118,10 +118,10 @@ class Comet {
     ctx.lineTo(this.ball.x - 50, this.ball.y + this.dy);
     ctx.lineTo(this.ball.x, this.ball.y + 5);
     ctx.fill();
-    
+
     // Draw comet head
     this.ball.draw(ctx);
-    
+
     ctx.shadowBlur = 0;
   }
 
@@ -145,10 +145,10 @@ class Star extends Circle {
     ctx.shadowColor = this.color2;
     ctx.shadowBlur = 5;
     ctx.fillStyle = this.color2;
-    
+
     const d = this.radius * 5;
     const p = this.radius;
-    
+
     // Draw 8-pointed star
     ctx.beginPath();
     ctx.moveTo(this.x - d, this.y);
@@ -161,10 +161,10 @@ class Star extends Circle {
     ctx.lineTo(this.x - p, this.y - p);
     ctx.lineTo(this.x - d, this.y);
     ctx.fill();
-    
+
     // Draw star center
     super.draw(ctx);
-    
+
     ctx.shadowBlur = 0;
   }
 }
@@ -202,24 +202,24 @@ const MeteorParticle = () => {
 
   const initializeObjects = useCallback((width: number, height: number) => {
     const objects: (Comet | Star)[] = [];
-    
+
     // Create comets
     for (let i = 0; i < params.cometCount; i++) {
       objects.push(createComet(width, height));
     }
-    
+
     // Create stars
     for (let i = 0; i < params.starCount; i++) {
       objects.push(createStar(width, height));
     }
-    
+
     objectsRef.current = objects;
   }, [params.cometCount, params.starCount, createComet, createStar]);
 
   const updateObjects = useCallback((width: number, height: number, dt: number) => {
     for (const obj of objectsRef.current) {
       obj.update(dt);
-      
+
       // Reset comets when they go off screen
       if (obj instanceof Comet && obj.ball.x > width + 50) {
         obj.ball.x = (obj.ball.x % width) - 50;
@@ -271,7 +271,7 @@ const MeteorParticle = () => {
 
     const oldWidth = canvas.width;
     const oldHeight = canvas.height;
-    
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
@@ -302,7 +302,7 @@ const MeteorParticle = () => {
 
   useEffect(() => {
     resizeCanvas();
-    
+
     const handleResize = () => resizeCanvas();
     window.addEventListener('resize', handleResize);
 
@@ -348,7 +348,7 @@ const MeteorParticle = () => {
         pointerEvents: 'none'
       }}>
         <div style={{ textAlign: 'center', color: 'white' }}>
-          <h1 style={{ 
+          <h1 style={{
             fontSize: '7rem',
             fontWeight: 'bold',
             margin: '0 0 1rem 0',
@@ -358,7 +358,7 @@ const MeteorParticle = () => {
           }}>
             Meteor Shower
           </h1>
-          <h2 style={{ 
+          <h2 style={{
             fontSize: '3rem',
             fontWeight: 'bold',
             margin: 0,
