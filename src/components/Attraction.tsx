@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, ReactNode } from 'react';
 
 interface Entity {
   x: number;
@@ -110,11 +110,12 @@ interface IAttraction {
   minVel: number;
   maxVel: number;
   colors: string[];
+  content: ReactNode;
 }
 
-interface IAttractionParams extends Partial<IAttraction> {}
+interface IAttractionParams extends Partial<IAttraction> { }
 
-const Attraction = ({ particleCount, radius, dispersal, range, rangeExplosion, force, explosionForce, minVel, maxVel, colors }: IAttractionParams) => {
+const Attraction = ({ particleCount, radius, dispersal, range, rangeExplosion, force, explosionForce, minVel, maxVel, colors, content }: IAttractionParams) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // @ts-expect-error fix later todo
   const animationRef = useRef<number>();
@@ -136,9 +137,10 @@ const Attraction = ({ particleCount, radius, dispersal, range, rangeExplosion, f
     explosionForce: 200,
     minVel: 10,
     maxVel: 150,
-    colors: ['#EBF4F7', '#E00B27', '#2474A6', '#F2A30F']
+    colors: ['#EBF4F7', '#E00B27', '#2474A6', '#F2A30F'],
+    content: <>Attraction Content</>
   };
-  
+
   const params: IAttraction = {
     ...defaultParams,
     ...(particleCount !== undefined && { particleCount }),
@@ -150,7 +152,8 @@ const Attraction = ({ particleCount, radius, dispersal, range, rangeExplosion, f
     ...(explosionForce !== undefined && { explosionForce }),
     ...(minVel !== undefined && { minVel }),
     ...(maxVel !== undefined && { maxVel }),
-    ...(colors !== undefined && { colors })
+    ...(colors !== undefined && { colors }),
+    ...(content !== undefined && { content }),
   };
 
   const changeColorAlpha = useCallback((color: string, alpha: number): string => {
@@ -348,40 +351,7 @@ const Attraction = ({ particleCount, radius, dispersal, range, rangeExplosion, f
         onMouseDown={handleMouseDown}
         onContextMenu={(e) => e.preventDefault()}
       />
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        pointerEvents: 'none'
-      }}>
-        <div style={{ textAlign: 'center', color: 'white' }}>
-          <h1 style={{
-            fontSize: '7rem',
-            fontWeight: 'bold',
-            margin: '0 0 1rem 0',
-            color: '#F0F0F1',
-            fontFamily: 'Lobster, cursive',
-            textShadow: '0 0 0.5em rgba(0, 0, 0, 1)'
-          }}>
-            Magnetic particles
-          </h1>
-          <h2 style={{
-            fontSize: '3rem',
-            fontWeight: 'bold',
-            margin: 0,
-            color: '#F0F0F1',
-            fontFamily: 'Lobster, cursive',
-            textShadow: '0 0 0.5em rgba(0, 0, 0, 1)'
-          }}>
-            React TypeScript
-          </h2>
-        </div>
-      </div>
+      {content}
     </div>
   );
 };
