@@ -12,6 +12,7 @@ function BasePage() {
     return (
         <div>
             <h1>Component Demos</h1>
+            <p>Welcome to <strong>react-canvas-bg-anim</strong>, a collection of React components for stunning canvas-based animations.</p>
             <ul>
                 <li><Link to="/attraction">Attraction</Link></li>
                 <li><Link to="/bubble-particle">Bubble Particle</Link></li>
@@ -52,7 +53,7 @@ const AttractionContent = () => <div style={{
             fontFamily: 'Lobster, cursive',
             textShadow: '0 0 0.5em rgba(0, 0, 0, 1)'
         }}>
-            React TypeScript
+            npm i react-canvas-bg-anim
         </h2>
     </div>
 </div>
@@ -87,7 +88,7 @@ const BubbleParticleContent = () => <div style={{
             fontFamily: 'Lobster, cursive',
             textShadow: '0 0 0.5em rgba(0, 0, 0, 1)'
         }}>
-            React TypeScript
+            npm i react-canvas-bg-anim
         </h2>
     </div>
 </div>
@@ -122,12 +123,12 @@ const MeteorParticleContent = () => <div style={{
             fontFamily: 'Lobster, cursive',
             textShadow: '0 0 0.5em rgba(0, 0, 0, 1)'
         }}>
-            React TypeScript
+            npm i react-canvas-bg-anim
         </h2>
     </div>
 </div>
 
-const MiniHighlightedBoxContent = ({i}:{i:number}): ReactNode => (
+const MiniHighlightedBoxContent = ({ i }: { i: number }): ReactNode => (
     <div style={{
         display: 'flex',
         flexDirection: 'column',
@@ -146,6 +147,16 @@ const MiniHighlightedBoxContent = ({i}:{i:number}): ReactNode => (
         }}>
             Highlighted Box {i}
         </h1>
+        <h2 style={{
+            fontSize: '3rem',
+            fontWeight: 'bold',
+            margin: 0,
+            color: '#F0F0F1',
+            fontFamily: 'Lobster, cursive',
+            textShadow: '0 0 0.5em rgba(0, 0, 0, 1)'
+        }}>
+            npm i react-canvas-bg-anim
+        </h2>
     </div>
 );
 
