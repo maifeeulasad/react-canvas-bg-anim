@@ -20,6 +20,7 @@ export default defineConfig({
         path.resolve(__dirname, 'src/components/BubbleParticle.tsx'),
         path.resolve(__dirname, 'src/components/HighlightedBox.tsx'),
         path.resolve(__dirname, 'src/components/MeteorParticle.tsx'),
+        path.resolve(__dirname, 'src/components/index.tsx'),
       ],
       formats: ['es', 'cjs']
     },
