@@ -27,12 +27,24 @@ export default defineConfig({
     outDir: 'dist',
     rollupOptions: {
       external: ['react', 'react-dom'],
-      output: {
-        globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM',
+      output: [
+        {
+          format: 'es',
+          entryFileNames: '[name].mjs',
+          globals: {
+            react: 'React',
+            'react-dom': 'ReactDOM',
+          },
         },
-      },
+        {
+          format: 'cjs',
+          entryFileNames: '[name].cjs',
+          globals: {
+            react: 'React',
+            'react-dom': 'ReactDOM',
+          },
+        },
+      ],
     },
   },
 });
