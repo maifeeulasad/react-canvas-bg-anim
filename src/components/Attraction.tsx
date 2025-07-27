@@ -112,11 +112,31 @@ interface IAttraction {
   maxVel: number;
   colors: string[];
   content: ReactNode;
+  backgroundColor: string;
+  trailEffect: boolean;
+  particleShape: 'circle' | 'square';
+  cursorStyle: string;
 }
 
 interface IAttractionParams extends Partial<IAttraction> { }
 
-const Attraction = ({ particleCount, radius, dispersal, range, rangeExplosion, force, explosionForce, minVel, maxVel, colors, content }: IAttractionParams) => {
+const Attraction = ({
+  particleCount,
+  radius,
+  dispersal,
+  range,
+  rangeExplosion,
+  force,
+  explosionForce,
+  minVel,
+  maxVel,
+  colors,
+  content,
+  backgroundColor = '#1f2937',
+  trailEffect = true,
+  particleShape = 'circle',
+  cursorStyle = 'crosshair',
+}: IAttractionParams) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // @ts-expect-error fix later todo
   const animationRef = useRef<number>();
@@ -137,7 +157,11 @@ const Attraction = ({ particleCount, radius, dispersal, range, rangeExplosion, f
     minVel: 10,
     maxVel: 150,
     colors: ['#EBF4F7', '#E00B27', '#2474A6', '#F2A30F'],
-    content: <>Attraction Content</>
+    content: <>Attraction Content</>,
+    backgroundColor: '#1f2937',
+    trailEffect: true,
+    particleShape: 'circle',
+    cursorStyle: 'crosshair',
   };
 
   const params: IAttraction = {
@@ -153,6 +177,10 @@ const Attraction = ({ particleCount, radius, dispersal, range, rangeExplosion, f
     ...(maxVel !== undefined && { maxVel }),
     ...(colors !== undefined && { colors }),
     ...(content !== undefined && { content }),
+    backgroundColor,
+    trailEffect,
+    particleShape: particleShape as 'circle' | 'square',
+    cursorStyle,
   };
 
   const changeColorAlpha = useCallback((color: string, alpha: number): string => {
@@ -227,9 +255,15 @@ const Attraction = ({ particleCount, radius, dispersal, range, rangeExplosion, f
 
       const alpha = (vel - params.minVel) / (params.maxVel - params.minVel);
       o.color = changeColorAlpha(o.color, alpha);
-      o.draw(ctx);
+
+      if (particleShape === 'circle') {
+        o.draw(ctx);
+      } else if (particleShape === 'square') {
+        ctx.fillStyle = o.color;
+        ctx.fillRect(o.x - o.radius, o.y - o.radius, o.radius * 2, o.radius * 2);
+      }
     }
-  }, [params.minVel, params.maxVel, changeColorAlpha]);
+  }, [params.minVel, params.maxVel, changeColorAlpha, particleShape]);
 
   const animate = useCallback(() => {
     const canvas = canvasRef.current;
@@ -251,14 +285,18 @@ const Attraction = ({ particleCount, radius, dispersal, range, rangeExplosion, f
     updateParticles(canvas.width, canvas.height, timeRef.current.dt);
 
     // Clear with semi-transparent background for trail effect
-    ctx.fillStyle = '#23232377';
+    if (trailEffect) {
+      ctx.fillStyle = `${backgroundColor}77`;
+    } else {
+      ctx.fillStyle = backgroundColor;
+    }
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Draw particles
     drawParticles(ctx);
 
     animationRef.current = requestAnimationFrame(animate);
-  }, [updateParticles, drawParticles]);
+  }, [updateParticles, drawParticles, trailEffect, backgroundColor]);
 
   const handleMouseMove = useCallback((e: MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
@@ -333,7 +371,7 @@ const Attraction = ({ particleCount, radius, dispersal, range, rangeExplosion, f
       width: '100vw',
       height: '100vh',
       overflow: 'hidden',
-      backgroundColor: '#1f2937',
+      backgroundColor,
       margin: 0,
       padding: 0
     }}>
@@ -343,7 +381,7 @@ const Attraction = ({ particleCount, radius, dispersal, range, rangeExplosion, f
           position: 'fixed',
           top: 0,
           left: 0,
-          cursor: 'crosshair'
+          cursor: cursorStyle
         }}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
